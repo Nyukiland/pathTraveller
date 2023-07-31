@@ -152,20 +152,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb795ec2884af034e8a20202a5932b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matrixEasy: {x: 3, y: 5}
-  matrixNormal: {x: 0, y: 0}
-  matrixHard: {x: 0, y: 0}
+  matrixSize: {x: 7, y: 10}
   probabilityOfMountain: 0
   prefabBegin:
   - {fileID: 919132149155446097, guid: 7a2ef30cd4fa3e149829b0ba0c14ccf0, type: 3}
   - {fileID: 919132149155446097, guid: 87878ba6ff66010409d1fc956bb0622d, type: 3}
   - {fileID: 919132149155446097, guid: 69f1d78a292cb724f96f55c4f0e63992, type: 3}
   - {fileID: 919132149155446097, guid: fe7b44205eda5ea45932903e181fde60, type: 3}
-  prefabBlue: []
-  prefabRed: []
-  easyQuantity: 
-  normalQuantity: 
-  hardQuantity: 
+  prefabPlayable: []
+  PlayableQuantity: 
+  inHandSize: 0
+  deck: []
+  inHand: []
 --- !u!4 &258908840
 Transform:
   m_ObjectHideFlags: 0

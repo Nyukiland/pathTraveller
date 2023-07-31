@@ -6,9 +6,7 @@ public class Manager : MonoBehaviour
 {
     [Header("Difficulty control")]
     [Space(2)]
-    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you")] [SerializeField] Vector2 matrixEasy;
-    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you")] [SerializeField] Vector2 matrixNormal;
-    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you")] [SerializeField] Vector2 matrixHard;
+    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you")] [SerializeField] Vector2 matrixSize;
     [Space]
     [Tooltip("0 is everytime and 10 is 10% (mountains appear every 3 tile if possible)")] [Range(0, 10)] [SerializeField] int probabilityOfMountain;
 
@@ -21,20 +19,21 @@ public class Manager : MonoBehaviour
 
     [Space]
 
-    [Tooltip("order should be the same as the set quantity")] [SerializeField] GameObject[] prefabBlue;
-
-    [Space]
-
-    [Tooltip("order should be the same as the set quantity")] [SerializeField] GameObject[] prefabRed;
-
+    [Tooltip("order should be the same as the set quantity")] [SerializeField] GameObject[] prefabPlayable;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
     [Header("Tile deck quantity")]
     [Space(2)]
-    [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] easyQuantity;
-    [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] normalQuantity;
-    [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] hardQuantity;
+    [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] PlayableQuantity;
+    [Tooltip("number of tile in the hand of player")] [SerializeField] int inHandSize;
+
+    [Space(10)]
+    [Header("------------------------------------------------------")]
+    [Header("In hand quantity and deck itself (feedback variable DO NOT TOUCH)")]
+    [Space(2)]
+    [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> deck;
+    [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> inHand;
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
@@ -57,23 +56,20 @@ public class Manager : MonoBehaviour
     //set of none nessecerry visible variable, mostly set up or feature
     GameObject[,] matrixOBJ;
     int[] rotationTilePossible = new int[] { 0, 90, 180, 270 };
-    public static int difficulty = 1;
-
+    Vector2 exitPoint;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //verify which diffficulty has been selected
-        if (difficulty == 1) SetUp(matrixEasy);
-        else if (difficulty == 2) SetUp(matrixNormal);
-        else if (difficulty == 3) SetUp(matrixHard);
+        SetUp(matrixSize);
+        //CreateDeck();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     void SetUp(Vector2 quantity)
@@ -88,7 +84,7 @@ public class Manager : MonoBehaviour
             for (int j = 0; j < quantity.y; j++)
             {
                 //creation of the tile
-                GameObject clone = Instantiate(prefabBegin[Random.Range(1, prefabBegin.Length)], new Vector3(((i * 2) - (quantity.x / 2) - 0.5f), 0, -j * 2), Quaternion.identity);
+                GameObject clone = Instantiate(prefabBegin[Random.Range(1, prefabBegin.Length)], new Vector3((i - ((quantity.x / 2)-0.5f))*2, 0, -j * 2), Quaternion.identity);
                 clone.transform.eulerAngles = new Vector3(-90, 0, rotationTilePossible[Random.Range(0, rotationTilePossible.Length)]);
 
                 //multidiemnsionnal array control
@@ -121,6 +117,33 @@ public class Manager : MonoBehaviour
 
         //determine the first tile as playable
         matrixGame[(int)quantity.x / 2, 0] += 10000;
+
+        //determine the tile that will give the win
+        exitPoint = new Vector2((int)quantity.x / 2, quantity.y-1);
+    }
+
+    void CreateDeck()
+    {
+        //create a deck of tile based on the quantity wanted
+        for (int i =0; i < PlayableQuantity.Length; i++)
+        {
+            for (int j = 0; j < PlayableQuantity[j]+1; j++)
+            {
+                deck.Add(prefabPlayable[i]);
+            }
+        }
+    }
+
+    void InHandManagement()
+    {
+        if (inHand.Count < inHandSize)
+        {
+            int randomTile = Random.Range(0, deck.Count);
+            inHand.Add(deck[randomTile]);
+            deck.RemoveAt(randomTile);
+        }
+
+
     }
 
     void IdentificationInMatrix(int col, int line)
