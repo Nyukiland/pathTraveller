@@ -151,9 +151,27 @@ public class Manager : MonoBehaviour
     {
         if (inHand.Count < inHandSize)
         {
-            int randomTile = Random.Range(0, deck.Count);
-            inHand.Add(deck[randomTile]);
-            deck.RemoveAt(randomTile);
+            for(int i = inHand.Count; i < inHandSize; i++)
+            {
+                //store the information of the tile
+                int randomTile = Random.Range(0, deck.Count);
+                inHand.Add(deck[randomTile]);
+                deck.RemoveAt(randomTile);
+
+                //create the visible part
+                GameObject clone = Instantiate(inHand[i], sideHand.transform.position, Quaternion.identity);
+                clone.transform.SetParent(sideHand.transform);
+                if (inHandSize > 3)
+                {
+                    clone.transform.localScale = new Vector3 (3 / inHandSize, 3 / inHandSize, 3 / inHandSize);
+                }
+                else
+                {
+                    clone.transform.localPosition = new Vector3(0, 0, i * 2);
+                }
+                
+            }
+
         }
 
 
