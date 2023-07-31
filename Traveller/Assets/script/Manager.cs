@@ -6,7 +6,7 @@ public class Manager : MonoBehaviour
 {
     [Header("Difficulty control")]
     [Space(2)]
-    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you")] [SerializeField] Vector2 matrixSize;
+    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you (do not go over 15)")] [SerializeField] Vector2 matrixSize; //the scene is not set up to go beyond a size but the code work with high quantity
     [Space]
     [Tooltip("0 is everytime and 10 is 10% (mountains appear every 3 tile if possible)")] [Range(0, 10)] [SerializeField] int probabilityOfMountain;
 
@@ -33,6 +33,7 @@ public class Manager : MonoBehaviour
     [Header("GUI")]
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject sideHand;
+    [Tooltip("visuale split between playground and hand")] [SerializeField] GameObject limitZone;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
@@ -80,7 +81,7 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        InHandManagement();
     }
 
     void SetUp(Vector2 quantity)
@@ -144,7 +145,9 @@ public class Manager : MonoBehaviour
             }
         }
 
-        sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x-1, 0].transform.position.x + 3, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z +2);
+        limitZone.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x-1, 0].transform.position.x + 5, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z +2);
+
+        sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x-1, 0].transform.position.x + 10, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z +2);
     }
 
     void InHandManagement()
@@ -160,14 +163,16 @@ public class Manager : MonoBehaviour
 
                 //create the visible part
                 GameObject clone = Instantiate(inHand[i], sideHand.transform.position, Quaternion.identity);
+                clone.transform.eulerAngles = new Vector3(-90, 0, 0);
                 clone.transform.SetParent(sideHand.transform);
                 if (inHandSize > 3)
                 {
-                    clone.transform.localScale = new Vector3 (3 / inHandSize, 3 / inHandSize, 3 / inHandSize);
+                    clone.transform.localScale = clone.transform.localScale * 3 / inHandSize;
+                    clone.transform.localPosition = new Vector3(0, 0, (i * 0.5f) - (0.5f + (0.75f - (3 / inHandSize))));
                 }
                 else
                 {
-                    clone.transform.localPosition = new Vector3(0, 0, i * 2);
+                    clone.transform.localPosition = new Vector3(0, 0, (i * 0.5f) - 0.5f);
                 }
                 
             }
