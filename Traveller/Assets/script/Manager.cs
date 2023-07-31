@@ -30,6 +30,12 @@ public class Manager : MonoBehaviour
 
     [Space(10)]
     [Header("------------------------------------------------------")]
+    [Header("GUI")]
+    [Space(2)]
+    [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject sideHand;
+
+    [Space(10)]
+    [Header("------------------------------------------------------")]
     [Header("In hand quantity and deck itself (feedback variable DO NOT TOUCH)")]
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> deck;
@@ -62,8 +68,13 @@ public class Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //automatically set the camera
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -matrixSize.y-5);
+        Camera.main.orthographicSize = matrixSize.y;
+
+        //set up the scene and game
         SetUp(matrixSize);
-        //CreateDeck();
+        CreateDeck();
     }
 
     // Update is called once per frame
@@ -132,6 +143,8 @@ public class Manager : MonoBehaviour
                 deck.Add(prefabPlayable[i]);
             }
         }
+
+        sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x, 0].transform.position.x + 3, sideHand.transform.position.y, sideHand.transform.position.z);
     }
 
     void InHandManagement()
