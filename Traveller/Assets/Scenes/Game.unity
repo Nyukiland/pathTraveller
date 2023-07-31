@@ -257,9 +257,18 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 87878ba6ff66010409d1fc956bb0622d, type: 3}
   - {fileID: 919132149155446097, guid: 69f1d78a292cb724f96f55c4f0e63992, type: 3}
   - {fileID: 919132149155446097, guid: fe7b44205eda5ea45932903e181fde60, type: 3}
-  prefabPlayable: []
-  PlayableQuantity: 
-  inHandSize: 0
+  prefabPlayable:
+  - {fileID: 919132149155446097, guid: 7d2ff251f9968db4c982253059ba167d, type: 3}
+  - {fileID: 919132149155446097, guid: 89cf5cac2afdf4a4cbc5beb5779fa591, type: 3}
+  - {fileID: 919132149155446097, guid: df9da9d9e452db940a01e2a760b1cf5d, type: 3}
+  - {fileID: 919132149155446097, guid: 0ee0bcd9f3e625f49b710e6163aa5b5f, type: 3}
+  - {fileID: 919132149155446097, guid: 34101693d2b034d4e9c8c97bc4164e91, type: 3}
+  - {fileID: 919132149155446097, guid: 9ee115c8de06e944fae8c2763d7391fc, type: 3}
+  - {fileID: 919132149155446097, guid: 6a999abefdb1fcf4ead78a32d6dceac7, type: 3}
+  - {fileID: 919132149155446097, guid: 116fd6b9df7966547b464235336d057b, type: 3}
+  - {fileID: 919132149155446097, guid: fc7a5b2e4466aa14bad15516a376b543, type: 3}
+  PlayableQuantity: 050000000500000005000000030000000300000003000000010000000100000001000000
+  inHandSize: 3
   sideHand: {fileID: 678254554}
   deck: []
   inHand: []
@@ -361,7 +370,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: aca63bee7ca84e14a9215fb576eea53a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -399,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 678254554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.391, z: -4}
+  m_LocalPosition: {x: 0, y: -0.391, z: -5.09}
   m_LocalScale: {x: 3.7142, y: 1, z: 8.8948}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -533,6 +542,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -629,8 +639,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -639,6 +649,23 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: ed143870bf3bb144f9a6e1d4ef418cb7, type: 2}
 --- !u!1 &1800063604
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,7 +765,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: aca63bee7ca84e14a9215fb576eea53a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

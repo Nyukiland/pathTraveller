@@ -144,7 +144,7 @@ public class Manager : MonoBehaviour
             }
         }
 
-        sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x, 0].transform.position.x + 3, sideHand.transform.position.y, sideHand.transform.position.z);
+        sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x-1, 0].transform.position.x + 3, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z +2);
     }
 
     void InHandManagement()
