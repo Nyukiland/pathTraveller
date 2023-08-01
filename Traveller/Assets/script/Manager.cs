@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour
     [Header("Tile deck quantity")]
     [Space(2)]
     [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] PlayableQuantity;
-    [Tooltip("number of tile in the hand of player")] [SerializeField] int inHandSize;
+    [Tooltip("number of tile in the hand of player")] [Range (1, 6)] [SerializeField] int inHandSize;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
@@ -40,7 +40,7 @@ public class Manager : MonoBehaviour
     [Header("In hand quantity and deck itself (feedback variable DO NOT TOUCH)")]
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> deck;
-    [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> inHand;
+    [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject[] inHand;
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
@@ -76,12 +76,13 @@ public class Manager : MonoBehaviour
         //set up the scene and game
         SetUp(matrixSize);
         CreateDeck();
+        InHandSetUp();
     }
 
     // Update is called once per frame
     void Update()
     {
-        InHandManagement();
+        
     }
 
     void SetUp(Vector2 quantity)
@@ -150,35 +151,24 @@ public class Manager : MonoBehaviour
         sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x-1, 0].transform.position.x + 10, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z +2);
     }
 
-    void InHandManagement()
+    void InHandSetUp()
     {
-        if (inHand.Count < inHandSize)
+        inHand = new GameObject[inHandSize];
+
+        for (int i = 0; i<inHandSize; i++)
         {
-            for(int i = inHand.Count; i < inHandSize; i++)
-            {
-                //store the information of the tile
-                int randomTile = Random.Range(0, deck.Count);
-                inHand.Add(deck[randomTile]);
-                deck.RemoveAt(randomTile);
+            //create the tile
+            int rng = Random.Range(0, deck.Count);
+            GameObject clone = Instantiate(deck[rng], transform.position, Quaternion.identity);
 
-                //create the visible part
-                GameObject clone = Instantiate(inHand[i], sideHand.transform.position, Quaternion.identity);
-                clone.transform.eulerAngles = new Vector3(-90, 0, 0);
-                clone.transform.SetParent(sideHand.transform);
-                if (inHandSize > 3)
-                {
-                    clone.transform.localScale = clone.transform.localScale * 3 / inHandSize;
-                    clone.transform.localPosition = new Vector3(0, 0, (i * 0.5f) - (0.5f + (0.75f - (3 / inHandSize))));
-                }
-                else
-                {
-                    clone.transform.localPosition = new Vector3(0, 0, (i * 0.5f) - 0.5f);
-                }
-                
-            }
+            //change the transform 
+            clone.transform.eulerAngles = new Vector3(-90, 0, 0);
+            clone.transform.position = new Vector3(sideHand.transform.position.x, sideHand.transform.position.y, sideHand.transform.position.z +((i*4)+(2*(1-inHandSize))));
 
+            //remove it from the deck and add it to the array
+            deck.RemoveAt(rng);
+            inHand[i] = clone;
         }
-
 
     }
 
