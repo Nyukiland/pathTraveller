@@ -315,6 +315,7 @@ GameObject:
   m_Component:
   - component: {fileID: 258908840}
   - component: {fileID: 258908839}
+  - component: {fileID: 258908841}
   m_Layer: 0
   m_Name: manager
   m_TagString: Untagged
@@ -355,6 +356,7 @@ MonoBehaviour:
   inHandSize: 4
   sideHand: {fileID: 678254554}
   limitZone: {fileID: 531250797}
+  scriptSetUp: {fileID: 258908841}
   deck: []
   inHand: []
 --- !u!4 &258908840
@@ -372,6 +374,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &258908841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258908838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b779090be8cce4fb08283a2e886e48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &354385723
 GameObject:
   m_ObjectHideFlags: 0
