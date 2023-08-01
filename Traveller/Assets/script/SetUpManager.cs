@@ -85,6 +85,10 @@ public class SetUpManager : MonoBehaviour
             //remove it from the deck and add it to the array
             d.RemoveAt(rng);
             hand[i] = clone;
+
+            //add tag to it
+            clone.tag = "CanSelect";
+
         }
     }
 }

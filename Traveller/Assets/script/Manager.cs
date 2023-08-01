@@ -35,11 +35,13 @@ public class Manager : MonoBehaviour
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject sideHand;
     [Tooltip("visuale split between playground and hand")] [SerializeField] GameObject limitZone;
 
+
     [Space(10)]
     [Header("------------------------------------------------------")]
     [Header("Script variable field)")]
     [Space(2)]
     [Tooltip("need the setup manager script")] [SerializeField] SetUpManager scriptSetUp;
+    [Tooltip("need the selection manager script")] [SerializeField] SelectionManager scriptSelect;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
@@ -47,6 +49,7 @@ public class Manager : MonoBehaviour
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> deck;
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject[] inHand;
+    [Tooltip("shows current tile currently selected")] [SerializeField] GameObject SelectedTile;
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
@@ -86,17 +89,14 @@ public class Manager : MonoBehaviour
 
         //visual feedback for the game
         limitZone.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x - 1, 0].transform.position.x + 5, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z + 2);
-        sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x - 1, 0].transform.position.x + 10, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z + 2);
+        sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x - 1, 0].transform.position.x + 15, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z + 2);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        scriptSelect.RaycastSelection(SelectedTile);
     }
 
-    void IdentificationInMatrix(int col, int line)
-    {
-
-    }
+    
 }
