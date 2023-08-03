@@ -25,7 +25,7 @@ public class Manager : MonoBehaviour
     [Header("------------------------------------------------------")]
     [Header("Tile deck quantity")]
     [Space(2)]
-    [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] PlayableQuantity;
+    [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] playableQuantity;
     [Tooltip("number of tile in the hand of player")] [Range (1, 6)] [SerializeField] int inHandSize;
 
     [Space(10)]
@@ -83,13 +83,15 @@ public class Manager : MonoBehaviour
         Camera.main.orthographicSize = matrixSize.y;
 
         //set up the scene and game
-        scriptSetUp.SetUp(matrixGame, matrixOBJ, prefabBegin, rotationTilePossible, probabilityOfMountain, exitPoint,matrixSize);
-        scriptSetUp.CreateDeck(deck, PlayableQuantity, prefabPlayable);
-        scriptSetUp.InHandSetUp(inHand, inHandSize, deck, sideHand);
+        SetUp();
+        CreateDeck();
 
         //visual feedback for the game
         limitZone.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x - 1, 0].transform.position.x + 5, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z + 2);
         sideHand.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x - 1, 0].transform.position.x + 15, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z + 2);
+
+        //create the hand
+        InHandSetUp();
     }
 
     // Update is called once per frame
@@ -98,5 +100,89 @@ public class Manager : MonoBehaviour
         scriptSelect.RaycastSelection(SelectedTile);
     }
 
-    
+    void SetUp()
+    {
+        //create proper sized multidimensionnal array
+        matrixGame = new int[(int)matrixSize.x, (int)matrixSize.y];
+        matrixOBJ = new GameObject[(int)matrixSize.x, (int)matrixSize.y];
+
+        //generate the grass (/empty) tile and fill the multidimensionnal array
+        for (int i = 0; i < matrixSize.x; i++)
+        {
+            for (int j = 0; j < matrixSize.y; j++)
+            {
+                //creation of the tile
+                GameObject clone = Instantiate(prefabBegin[Random.Range(1, prefabBegin.Length)], new Vector3((i - ((matrixSize.x / 2) - 0.5f)) * 2, 0, -j * 2), Quaternion.identity);
+                clone.transform.eulerAngles = new Vector3(-90, 0, rotationTilePossible[Random.Range(0, rotationTilePossible.Length)]);
+
+                //multidiemnsionnal array control
+                matrixOBJ[i, j] = clone;
+                matrixGame[i, j] = 00000;
+
+            }
+        }
+
+        //generate the mountains (/never placeable tile) and correct the multidimensionnal array (start at 1 to avoid softlock)
+        for (int k = 1; k < matrixSize.y; k += 3)
+        {
+            //random the spawn possibility
+            int shouldIHaveAMountain = Random.Range(0, probabilityOfMountain);
+
+            //make sure it doesn't instantiate on the last raw so it doesn't block the exit
+            if (k != matrixSize.y - 1 && shouldIHaveAMountain == 0)
+            {
+                //creation of the tile
+                int randomInt = Random.Range(0, (int)matrixSize.x);
+                GameObject clone = Instantiate(prefabBegin[0], matrixOBJ[randomInt, k].transform.position, Quaternion.identity);
+                clone.transform.eulerAngles = new Vector3(-90, 0, rotationTilePossible[Random.Range(0, rotationTilePossible.Length)]);
+
+                //multidiemnsionnal array control
+                Destroy(matrixOBJ[randomInt, k]);
+                matrixOBJ[randomInt, k] = clone;
+                matrixGame[randomInt, k] += 20000;
+            }
+        }
+
+        //determine the first tile as playable
+        matrixGame[(int)matrixSize.x / 2, 0] += 10000;
+
+        //determine the tile that will give the win
+        exitPoint = new Vector2((int)matrixSize.x / 2, matrixSize.y - 1);
+    }
+
+    void CreateDeck()
+    {
+        //create a deck of tile based on the quantity wanted
+        for (int i = 0; i < playableQuantity.Length; i++)
+        {
+            for (int j = 0; j < playableQuantity[j] + 1; j++)
+            {
+                deck.Add(prefabPlayable[i]);
+            }
+        }
+    }
+
+    void InHandSetUp()
+    {
+        inHand = new GameObject[inHandSize];
+
+        for (int i = 0; i < inHandSize; i++)
+        {
+            //create the tile
+            int rng = Random.Range(0, deck.Count);
+            GameObject clone = Instantiate(deck[rng], transform.position, Quaternion.identity);
+
+            //change the transform 
+            clone.transform.eulerAngles = new Vector3(-90, 0, 0);
+            clone.transform.position = new Vector3(sideHand.transform.position.x, sideHand.transform.position.y, sideHand.transform.position.z + ((i * 4) + (2 * (1 - inHandSize))));
+
+            //remove it from the deck and add it to the array
+            deck.RemoveAt(rng);
+            inHand[i] = clone;
+
+            //add tag to it
+            clone.tag = "CanSelect";
+
+        }
+    }
 }

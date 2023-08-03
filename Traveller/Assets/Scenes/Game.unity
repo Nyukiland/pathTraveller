@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 258908840}
   - component: {fileID: 258908839}
   - component: {fileID: 258908841}
+  - component: {fileID: 258908842}
   m_Layer: 0
   m_Name: manager
   m_TagString: Untagged
@@ -352,13 +353,15 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 6a999abefdb1fcf4ead78a32d6dceac7, type: 3}
   - {fileID: 919132149155446097, guid: 116fd6b9df7966547b464235336d057b, type: 3}
   - {fileID: 919132149155446097, guid: fc7a5b2e4466aa14bad15516a376b543, type: 3}
-  PlayableQuantity: 050000000500000005000000030000000300000003000000010000000100000001000000
+  playableQuantity: 
   inHandSize: 4
   sideHand: {fileID: 678254554}
   limitZone: {fileID: 531250797}
   scriptSetUp: {fileID: 258908841}
+  scriptSelect: {fileID: 258908842}
   deck: []
   inHand: []
+  SelectedTile: {fileID: 0}
 --- !u!4 &258908840
 Transform:
   m_ObjectHideFlags: 0
@@ -384,6 +387,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14b779090be8cce4fb08283a2e886e48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &258908842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258908838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170468fd71cbe864bae13b8befe6f79e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &354385723
