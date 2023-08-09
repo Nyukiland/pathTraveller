@@ -353,7 +353,7 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 6a999abefdb1fcf4ead78a32d6dceac7, type: 3}
   - {fileID: 919132149155446097, guid: 116fd6b9df7966547b464235336d057b, type: 3}
   - {fileID: 919132149155446097, guid: fc7a5b2e4466aa14bad15516a376b543, type: 3}
-  playableQuantity: 
+  playableQuantity: 050000000500000005000000030000000300000003000000010000000100000001000000
   inHandSize: 4
   sideHand: {fileID: 678254554}
   limitZone: {fileID: 531250797}

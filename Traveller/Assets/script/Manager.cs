@@ -40,7 +40,6 @@ public class Manager : MonoBehaviour
     [Header("------------------------------------------------------")]
     [Header("Script variable field)")]
     [Space(2)]
-    [Tooltip("need the setup manager script")] [SerializeField] SetUpManager scriptSetUp;
     [Tooltip("need the selection manager script")] [SerializeField] SelectionManager scriptSelect;
 
     [Space(10)]
