@@ -48,7 +48,6 @@ public class Manager : MonoBehaviour
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> deck;
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject[] inHand;
-    [Tooltip("shows current tile currently selected")] [SerializeField] GameObject SelectedTile;
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
@@ -96,7 +95,6 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scriptSelect.RaycastSelection(SelectedTile);
     }
 
     void SetUp()
