@@ -46,7 +46,9 @@ public class SelectionManager : MonoBehaviour
                 }
                 else if (hit.collider.gameObject == rotateTile && selectedTile != null)
                 {
-                    selectedTile.transform.eulerAngles = new Vector3(-90, 0, selectedTile.transform.eulerAngles.z + 90);
+                    selectedTile.transform.SetParent(null);
+                    selectedTile.transform.Rotate(selectedTile.transform.up, 90);
+                    selectedTile.transform.SetParent(selectedPlacement.transform);
                 }
             }
         }

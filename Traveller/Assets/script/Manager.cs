@@ -110,7 +110,7 @@ public class Manager : MonoBehaviour
             {
                 //creation of the tile
                 GameObject clone = Instantiate(prefabBegin[Random.Range(1, prefabBegin.Length)], new Vector3((i - ((matrixSize.x / 2) - 0.5f)) * 2, 0, -j * 2), Quaternion.identity);
-                clone.transform.eulerAngles = new Vector3(-90, 0, rotationTilePossible[Random.Range(0, rotationTilePossible.Length)]);
+                clone.transform.eulerAngles = new Vector3(0, rotationTilePossible[Random.Range(0, rotationTilePossible.Length)], 0);
 
                 //multidiemnsionnal array control
                 matrixOBJ[i, j] = clone;
@@ -131,7 +131,7 @@ public class Manager : MonoBehaviour
                 //creation of the tile
                 int randomInt = Random.Range(0, (int)matrixSize.x);
                 GameObject clone = Instantiate(prefabBegin[0], matrixOBJ[randomInt, k].transform.position, Quaternion.identity);
-                clone.transform.eulerAngles = new Vector3(-90, 0, rotationTilePossible[Random.Range(0, rotationTilePossible.Length)]);
+                clone.transform.eulerAngles = new Vector3(0, rotationTilePossible[Random.Range(0, rotationTilePossible.Length)], 0);
 
                 //multidiemnsionnal array control
                 Destroy(matrixOBJ[randomInt, k]);
@@ -170,7 +170,6 @@ public class Manager : MonoBehaviour
             GameObject clone = Instantiate(deck[rng], transform.position, Quaternion.identity);
 
             //change the transform 
-            clone.transform.eulerAngles = new Vector3(-90, 0, 0);
             clone.transform.position = new Vector3(sideHand.transform.position.x, sideHand.transform.position.y, sideHand.transform.position.z + ((i * 4) + (2 * (1 - inHandSize))));
 
             //remove it from the deck and add it to the array

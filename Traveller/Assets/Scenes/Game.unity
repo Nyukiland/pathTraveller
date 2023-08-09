@@ -315,7 +315,6 @@ GameObject:
   m_Component:
   - component: {fileID: 258908840}
   - component: {fileID: 258908839}
-  - component: {fileID: 258908841}
   - component: {fileID: 258908842}
   m_Layer: 0
   m_Name: manager
@@ -339,20 +338,20 @@ MonoBehaviour:
   matrixSize: {x: 7, y: 10}
   probabilityOfMountain: 0
   prefabBegin:
-  - {fileID: 7337831370871215160, guid: 8804e6d8fe156b34983d696af09ab863, type: 3}
-  - {fileID: 1296703075241658130, guid: 17065194d60adae4cbe9a9bdd3f88844, type: 3}
-  - {fileID: 1905740406507145396, guid: dcd58ed232c70624e92ca44930d6e3cc, type: 3}
-  - {fileID: 8909417686428845638, guid: 9866535fde7b04e47828d085ca81a711, type: 3}
+  - {fileID: 8229749474947436665, guid: 8804e6d8fe156b34983d696af09ab863, type: 3}
+  - {fileID: 6782962043394463339, guid: 9866535fde7b04e47828d085ca81a711, type: 3}
+  - {fileID: 7252562646514743412, guid: dcd58ed232c70624e92ca44930d6e3cc, type: 3}
+  - {fileID: 3394579938945189545, guid: 17065194d60adae4cbe9a9bdd3f88844, type: 3}
   prefabPlayable:
-  - {fileID: 2725628274293489621, guid: 02eaf7f741407534e9a86b479f5dc91f, type: 3}
-  - {fileID: 805253537344745916, guid: 8476524baaae773448f185ee49fc7e7f, type: 3}
-  - {fileID: 4342987954593205380, guid: 5e8a3461ca7fa2a47b0ae0bd465dfb9e, type: 3}
-  - {fileID: 4600226846322606253, guid: 6271c1543b89fb949be1d469e37bbec9, type: 3}
-  - {fileID: 876741053550556545, guid: 460fc3bc1afb9ef429cff66db0ac5e02, type: 3}
-  - {fileID: 2440316002346609657, guid: 4c0ec5ef64e6fc74f8ac8df27cb29119, type: 3}
-  - {fileID: 482943866604454525, guid: 693359e90afe2a14180e8a8cd3ee0974, type: 3}
-  - {fileID: 3317851440434125382, guid: 5e71dc14deae3394483773ce22b0818e, type: 3}
-  - {fileID: 3773704475320457237, guid: b9b1a6c36c91e6f44948922eb4228c8d, type: 3}
+  - {fileID: 3353333438963519040, guid: ee899bc0718d5e64f8dcafc83581ec90, type: 3}
+  - {fileID: 1320599570963194993, guid: 8476524baaae773448f185ee49fc7e7f, type: 3}
+  - {fileID: 957544703167286649, guid: 5e8a3461ca7fa2a47b0ae0bd465dfb9e, type: 3}
+  - {fileID: 6989131094176032000, guid: 6271c1543b89fb949be1d469e37bbec9, type: 3}
+  - {fileID: 6230611855461467514, guid: 460fc3bc1afb9ef429cff66db0ac5e02, type: 3}
+  - {fileID: 5638807647305515315, guid: 4c0ec5ef64e6fc74f8ac8df27cb29119, type: 3}
+  - {fileID: 3638188579018164554, guid: ca8c709223f41e14c8b7197d3f33a9fa, type: 3}
+  - {fileID: 5738935728844854529, guid: 5e71dc14deae3394483773ce22b0818e, type: 3}
+  - {fileID: 1856384811631996316, guid: b9b1a6c36c91e6f44948922eb4228c8d, type: 3}
   playableQuantity: 050000000500000005000000030000000300000003000000010000000100000001000000
   inHandSize: 4
   sideHand: {fileID: 678254554}
@@ -375,18 +374,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &258908841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 258908838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b779090be8cce4fb08283a2e886e48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &258908842
 MonoBehaviour:
   m_ObjectHideFlags: 0
