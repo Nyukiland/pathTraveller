@@ -13,7 +13,9 @@ public class SelectionManager : MonoBehaviour
 
     [Header ("feedback variable (DO NOT TOUCH)")]
     [Tooltip("shows current tile currently selected")] public GameObject selectedTile;
+    [Tooltip("Placing tile variable")] public GameObject placingTile;
     [Tooltip("store the position of tile")] public Vector3 posTile;
+    
 
     //set of none nessecerry visible variable, mostly feature  
     float selectedPlacementPos;
@@ -50,19 +52,25 @@ public class SelectionManager : MonoBehaviour
                     selectedTile.transform.Rotate(selectedTile.transform.up, 90);
                     selectedTile.transform.SetParent(selectedPlacement.transform);
                 }
+                else if (hit.collider.CompareTag("Place"))
+                {
+                    placingTile = selectedTile;
+                    placingTile.transform.position = hit.collider.gameObject.transform.position;
+                    DetachSelected();
+                }
             }
         }
     }
 
     void DetachSelected()
     {
-        selectedTile.tag = "CanSelect";
+        if (placingTile == null) selectedTile.tag = "CanSelect";
 
         selectedTile.transform.SetParent(null);
         selectedTile.transform.position = posTile;
 
         selectedTile = null;
-        posTile = Vector3.zero;
+        if (placingTile == null) posTile = Vector3.zero;
     }
 
     void AttachSelected(RaycastHit hitOBJ)

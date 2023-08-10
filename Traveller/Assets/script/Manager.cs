@@ -34,6 +34,7 @@ public class Manager : MonoBehaviour
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject sideHand;
     [Tooltip("visuale split between playground and hand")] [SerializeField] GameObject limitZone;
+    [Tooltip("a gameObject")] [SerializeField] GameObject placementTile;
 
 
     [Space(10)]
@@ -48,6 +49,8 @@ public class Manager : MonoBehaviour
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] List<GameObject> deck;
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject[] inHand;
+    [Tooltip("list of the placement feedbackTile")] [SerializeField] List<GameObject> placementTileList;
+    [Tooltip("list of the placement feedbackTile")] [SerializeField] List<Vector2> placementTileListM;
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
@@ -71,6 +74,7 @@ public class Manager : MonoBehaviour
     GameObject[,] matrixOBJ;
     int[] rotationTilePossible = new int[] { 0, 90, 180, 270 };
     Vector2 exitPoint;
+    bool isPlacementTool;
 
 
     // Start is called before the first frame update
@@ -95,6 +99,8 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        placeTile();
+        FeedbackVisuPlacement();
     }
 
     void SetUp()
@@ -180,5 +186,61 @@ public class Manager : MonoBehaviour
             clone.tag = "CanSelect";
 
         }
+    }
+
+    void FeedbackVisuPlacement()
+    {
+        if (scriptSelect.selectedTile != null)
+        {
+            isPlacementTool = true;
+
+            for (int i = 0; i < matrixSize.x; i++)
+            {
+                for (int j = 0; j < matrixSize.y; j++)
+                {
+                    if (matrixGame[i,j] - 10000 >= 0 && matrixGame[i, j] - 10000 < 20000)
+                    {
+                        placementTileListM.Add(new Vector2 (i, j));
+                        placementTileList.Add(Instantiate(placementTile, matrixOBJ[i, j].transform.position, Quaternion.identity));
+                    }
+                }
+            }
+        }
+        else if (scriptSelect.selectedTile != null && isPlacementTool == true)
+        {
+            isPlacementTool = false;
+            
+            while (placementTileList.Count > 0)
+            {
+                Destroy(placementTileList[0]);
+                placementTileList.RemoveAt(0);
+            }
+            placementTileListM.Clear();
+        }
+    }
+
+    void placeTile()
+    {
+        if (scriptSelect.placingTile != null)
+        {
+            Vector2 storing = Vector2.zero;
+            for (int i = 0; i < placementTileList.Count; i++)
+            {
+                if (scriptSelect.placingTile.transform.position == placementTileList[i].transform.position)
+                {
+                    storing = new Vector2((int)placementTileListM[i].x, (int)placementTileListM[i].y);
+                }
+            }
+
+            GestionTileAfterPlacement(storing);
+
+            scriptSelect.placingTile = null;
+        }
+    }
+
+    void GestionTileAfterPlacement(Vector2 matrixPos)
+    {
+        Destroy(matrixOBJ[(int)matrixPos.x, (int)matrixPos.y]);
+        matrixOBJ[(int)matrixPos.x, (int)matrixPos.y] = scriptSelect.placingTile;
     }
 }

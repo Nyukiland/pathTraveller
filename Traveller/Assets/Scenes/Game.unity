@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   matrixSize: {x: 7, y: 10}
-  probabilityOfMountain: 0
+  probabilityOfMountain: 2
   prefabBegin:
   - {fileID: 8229749474947436665, guid: 8804e6d8fe156b34983d696af09ab863, type: 3}
   - {fileID: 6782962043394463339, guid: 9866535fde7b04e47828d085ca81a711, type: 3}
@@ -356,9 +356,12 @@ MonoBehaviour:
   inHandSize: 4
   sideHand: {fileID: 678254554}
   limitZone: {fileID: 531250797}
+  placementTile: {fileID: 4439705557956090167, guid: d272d5ecdf9176b47b1325259495833a, type: 3}
   scriptSelect: {fileID: 258908842}
   deck: []
   inHand: []
+  placementTileList: []
+  placementTileListM: []
 --- !u!4 &258908840
 Transform:
   m_ObjectHideFlags: 0
@@ -390,6 +393,7 @@ MonoBehaviour:
   cancelTile: {fileID: 2688243796535163808}
   rotateTile: {fileID: 6534622134228332773}
   selectedTile: {fileID: 0}
+  placingTile: {fileID: 0}
   posTile: {x: 0, y: 0, z: 0}
 --- !u!1 &354385723
 GameObject:
