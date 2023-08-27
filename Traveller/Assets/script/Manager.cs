@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour
     [Header("Tile deck quantity")]
     [Space(2)]
     [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] playableQuantity;
-    [Tooltip("number of tile in the hand of player")] [Range (1, 6)] [SerializeField] int inHandSize;
+    [Tooltip("number of tile in the hand of player")] [Range(1, 6)] [SerializeField] int inHandSize;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
@@ -39,9 +39,9 @@ public class Manager : MonoBehaviour
 
     [Space(10)]
     [Header("------------------------------------------------------")]
-    [Header("Script variable field)")]
+    [Header("Script variable field")]
     [Space(2)]
-    [Tooltip("need the selection manager script")] [SerializeField] SelectionManager scriptSelect;
+    [Tooltip("need the selection manager script")] [SerializeField] SelectionManager selectionManager;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
@@ -81,8 +81,9 @@ public class Manager : MonoBehaviour
     void Start()
     {
         //automatically set the camera
-        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -matrixSize.y-5);
-        Camera.main.orthographicSize = matrixSize.y;
+        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -matrixSize.y - 5);
+        if (matrixSize.y > matrixSize.x) Camera.main.orthographicSize = Mathf.Clamp(matrixSize.y, 8, 10);
+        else Mathf.Clamp(matrixSize.x, 8, 10);
 
         //set up the scene and game
         SetUp();
@@ -94,13 +95,6 @@ public class Manager : MonoBehaviour
 
         //create the hand
         InHandSetUp();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        placeTile();
-        FeedbackVisuPlacement();
     }
 
     void SetUp()
@@ -188,9 +182,9 @@ public class Manager : MonoBehaviour
         }
     }
 
-    void FeedbackVisuPlacement()
+    public void FeedbackVisuPlacement()
     {
-        if (scriptSelect.selectedTile != null)
+        if (selectionManager.selectedTile != null)
         {
             isPlacementTool = true;
 
@@ -198,18 +192,18 @@ public class Manager : MonoBehaviour
             {
                 for (int j = 0; j < matrixSize.y; j++)
                 {
-                    if (matrixGame[i,j] - 10000 >= 0 && matrixGame[i, j] - 10000 < 20000)
+                    if (matrixGame[i, j].ToString()[0] == 1.ToString()[0])
                     {
-                        placementTileListM.Add(new Vector2 (i, j));
+                        placementTileListM.Add(new Vector2(i, j));
                         placementTileList.Add(Instantiate(placementTile, matrixOBJ[i, j].transform.position, Quaternion.identity));
                     }
                 }
             }
         }
-        else if (scriptSelect.selectedTile != null && isPlacementTool == true)
+        else if (selectionManager.selectedTile != null && isPlacementTool == true)
         {
             isPlacementTool = false;
-            
+
             while (placementTileList.Count > 0)
             {
                 Destroy(placementTileList[0]);
@@ -219,28 +213,30 @@ public class Manager : MonoBehaviour
         }
     }
 
-    void placeTile()
+    public void ClearFeedBackPlacement()
     {
-        if (scriptSelect.placingTile != null)
+        for (int i = 0; i < placementTileListM.Count; i++)
         {
-            Vector2 storing = Vector2.zero;
-            for (int i = 0; i < placementTileList.Count; i++)
-            {
-                if (scriptSelect.placingTile.transform.position == placementTileList[i].transform.position)
-                {
-                    storing = new Vector2((int)placementTileListM[i].x, (int)placementTileListM[i].y);
-                }
-            }
-
-            GestionTileAfterPlacement(storing);
-
-            scriptSelect.placingTile = null;
+            GameObject temp = placementTileList[i];
+            placementTileList.RemoveAt(i);
+            Destroy(temp);
         }
+        placementTileListM.Clear();
+    }
+
+    public void placeTile(GameObject pos)
+    {
+        Vector2 storing = Vector2.zero;
+        storing = placementTileListM[placementTileList.IndexOf(pos)];
+        selectionManager.placingTile.transform.position = pos.transform.position;
+        ClearFeedBackPlacement();
+        GestionTileAfterPlacement(storing);
+        selectionManager.placingTile = null;
     }
 
     void GestionTileAfterPlacement(Vector2 matrixPos)
     {
         Destroy(matrixOBJ[(int)matrixPos.x, (int)matrixPos.y]);
-        matrixOBJ[(int)matrixPos.x, (int)matrixPos.y] = scriptSelect.placingTile;
+        matrixOBJ[(int)matrixPos.x, (int)matrixPos.y] = selectionManager.placingTile;
     }
 }

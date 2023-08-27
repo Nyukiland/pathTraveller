@@ -7,6 +7,7 @@ public class SelectionManager : MonoBehaviour
     //controls the selection of a tile
 
     [Header("visual and placement variable")]
+    [SerializeField] Manager manager;
     [SerializeField] GameObject selectedPlacement;
     [SerializeField] GameObject cancelTile;
     [SerializeField] GameObject rotateTile;
@@ -36,15 +37,20 @@ public class SelectionManager : MonoBehaviour
                 if (hit.collider.CompareTag("CanSelect") && selectedTile == null)
                 {
                     AttachSelected(hit);
+                    manager.FeedbackVisuPlacement();
                 }
                 else if (hit.collider.CompareTag("CanSelect") && selectedTile != null)
                 {
                     DetachSelected();
+                    manager.ClearFeedBackPlacement();
+
                     AttachSelected(hit);
+                    manager.FeedbackVisuPlacement();
                 }
                 else if (hit.collider.gameObject == cancelTile && selectedTile != null)
                 {
                     DetachSelected();
+                    manager.ClearFeedBackPlacement();
                 }
                 else if (hit.collider.gameObject == rotateTile && selectedTile != null)
                 {
@@ -54,12 +60,21 @@ public class SelectionManager : MonoBehaviour
                 }
                 else if (hit.collider.CompareTag("Place"))
                 {
-                    placingTile = selectedTile;
-                    placingTile.transform.position = hit.collider.gameObject.transform.position;
-                    DetachSelected();
+                    placeTile(hit.collider.gameObject);
                 }
             }
         }
+    }
+
+    void placeTile(GameObject obj)
+    {
+        selectedTile.transform.SetParent(null);
+        placingTile = selectedTile;
+        selectedTile = null;
+        posTile = Vector3.zero;
+
+        manager.placeTile(obj);
+        manager.ClearFeedBackPlacement();
     }
 
     void DetachSelected()

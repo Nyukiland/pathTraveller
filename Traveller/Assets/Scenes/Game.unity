@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   matrixSize: {x: 7, y: 10}
-  probabilityOfMountain: 2
+  probabilityOfMountain: 0
   prefabBegin:
   - {fileID: 8229749474947436665, guid: 8804e6d8fe156b34983d696af09ab863, type: 3}
   - {fileID: 6782962043394463339, guid: 9866535fde7b04e47828d085ca81a711, type: 3}
@@ -357,7 +357,7 @@ MonoBehaviour:
   sideHand: {fileID: 678254554}
   limitZone: {fileID: 531250797}
   placementTile: {fileID: 4439705557956090167, guid: d272d5ecdf9176b47b1325259495833a, type: 3}
-  scriptSelect: {fileID: 258908842}
+  selectionManager: {fileID: 258908842}
   deck: []
   inHand: []
   placementTileList: []
@@ -389,6 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170468fd71cbe864bae13b8befe6f79e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  manager: {fileID: 258908839}
   selectedPlacement: {fileID: 1220972048}
   cancelTile: {fileID: 2688243796535163808}
   rotateTile: {fileID: 6534622134228332773}
