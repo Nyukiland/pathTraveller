@@ -5,11 +5,11 @@ using UnityEngine;
 public class identifier : MonoBehaviour
 {
     //this variable could be automatically set up in the start if needed
-    [Tooltip ("the code that correspond to the tile (need a precise identification see the script annotation for guide)")] public int identification = 0000;
+    [Tooltip("the code that correspond to the tile (need a precise identification see the script annotation for guide)")] public string identification = "0000";
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
-    5 digits are used to give the right amount of information.
+    4 digits are used to give the right amount of information.
 
     First digit is the state of tile. 0 is not placable, 1 is placable, 2 is never placable
 
@@ -22,15 +22,15 @@ public class identifier : MonoBehaviour
 
     private void Start()
     {
-        if (identification!=0) rotationForIdentifier();
+        rotationForIdentifier();
     }
 
 
     public void rotationForIdentifier()
     {
-        if (transform.rotation.y == 0) identification = identification.ToString()[0] + identification.ToString()[1] + identification.ToString()[2] + 0.ToString()[0];
-        else if (transform.rotation.y == 90) identification = identification.ToString()[0] + identification.ToString()[1] + identification.ToString()[2] + 1.ToString()[0];
-        else if (transform.rotation.y == 180) identification = identification.ToString()[0] + identification.ToString()[1] + identification.ToString()[2] + 2.ToString()[0];
-        else if (transform.rotation.y == -90) identification = identification.ToString()[0] + identification.ToString()[1] + identification.ToString()[2] + 3.ToString()[0];
+        if (transform.eulerAngles.y == 0) identification = string.Concat(identification[0], identification[1], identification[2], "0");
+        else if (transform.eulerAngles.y == 90) identification = string.Concat(identification[0], identification[1], identification[2], "1");
+        else if (transform.eulerAngles.y == 180) identification = string.Concat(identification[0], identification[1], identification[2], "2");
+        else if (transform.eulerAngles.y == 270) identification = string.Concat(identification[0], identification[1], identification[2], "3");
     }
 }

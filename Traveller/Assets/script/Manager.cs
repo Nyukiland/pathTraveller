@@ -34,7 +34,8 @@ public class Manager : MonoBehaviour
     [Space(2)]
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject sideHand;
     [Tooltip("visuale split between playground and hand")] [SerializeField] GameObject limitZone;
-    [Tooltip("a gameObject")] [SerializeField] GameObject placementTile;
+    [Tooltip("a gameObject that will be used as feedback for the placement")] [SerializeField] GameObject placementTile;
+    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedback;
 
 
     [Space(10)]
@@ -54,7 +55,7 @@ public class Manager : MonoBehaviour
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
-    5 digits are used to give the right amount of information.
+    4 digits are used to give the right amount of information.
 
     First digit is the state of tile. 0 is not placable, 1 is placable, 2 is never placable
 
@@ -65,13 +66,13 @@ public class Manager : MonoBehaviour
     Fourth digit is the rotation of the tile. 0 is 0 degree, 1 is 90 degree, 2 is 180 degree, 3 is 270 degree
 
     */
-    int[,] matrixGame; //most important multidimensionnal array
+    string[,] matrixGame; //most important multidimensionnal array
 
 
     //set of none nessecerry visible variable, mostly set up or feature
     GameObject[,] matrixOBJ;
     int[] rotationTilePossible = new int[] { 0, 90, 180, 270 };
-    Vector2 exitPoint;
+    bool firstTile = true;
 
 
     // Start is called before the first frame update
@@ -97,7 +98,7 @@ public class Manager : MonoBehaviour
     void SetUp()
     {
         //create proper sized multidimensionnal array
-        matrixGame = new int[(int)matrixSize.x, (int)matrixSize.y];
+        matrixGame = new string[(int)matrixSize.x, (int)matrixSize.y];
         matrixOBJ = new GameObject[(int)matrixSize.x, (int)matrixSize.y];
 
         //generate the grass (/empty) tile and fill the multidimensionnal array
@@ -111,7 +112,7 @@ public class Manager : MonoBehaviour
 
                 //multidiemnsionnal array control
                 matrixOBJ[i, j] = clone;
-                matrixGame[i, j] = 0000;
+                matrixGame[i, j] = "0000";
 
             }
         }
@@ -133,15 +134,12 @@ public class Manager : MonoBehaviour
                 //multidiemnsionnal array control
                 Destroy(matrixOBJ[randomInt, k]);
                 matrixOBJ[randomInt, k] = clone;
-                matrixGame[randomInt, k] += 2000;
+                matrixGame[randomInt, k] = string.Concat("2", matrixGame[randomInt, k][1], matrixGame[randomInt, k][2], matrixGame[randomInt, k][3]);
             }
         }
 
         //determine the first tile as playable
-        matrixGame[(int)matrixSize.x / 2, 0] += 1000;
-
-        //determine the tile that will give the win
-        exitPoint = new Vector2((int)matrixSize.x / 2, matrixSize.y - 1);
+        matrixGame[(int)matrixSize.x / 2, 0] = string.Concat("1", matrixGame[(int)matrixSize.x / 2, 0][1], matrixGame[(int)matrixSize.x / 2, 0][2], matrixGame[(int)matrixSize.x / 2, 0][3]);
     }
 
     void CreateDeck()
@@ -179,7 +177,7 @@ public class Manager : MonoBehaviour
         }
     }
 
-    public void FeedbackVisuPlacement()
+    public void FeedbackVisuPlacement(string ID)
     {
         if (selectionManager.selectedTile != null)
         {
@@ -188,7 +186,7 @@ public class Manager : MonoBehaviour
             {
                 for (int j = 0; j < matrixSize.y; j++)
                 {
-                    if (matrixGame[i, j].ToString()[0] == 1.ToString()[0])
+                    if (VerifyTileForFeedback(ID, new Vector2(i, j)))
                     {
                         placementTileListM.Add(new Vector2(i, j));
                         placementTileList.Add(Instantiate(placementTile, matrixOBJ[i, j].transform.position, Quaternion.identity));
@@ -196,23 +194,14 @@ public class Manager : MonoBehaviour
                 }
             }
         }
-        /*
-        else if (selectionManager.selectedTile != null && isPlacementTool == true)
-        {
-            isPlacementTool = false;
-
-            while (placementTileList.Count > 0)
-            {
-                Destroy(placementTileList[0]);
-                placementTileList.RemoveAt(0);
-            }
-            placementTileListM.Clear();
-        }
-        */
+        
+        
     }
 
     public void ClearFeedBackPlacement()
     {
+        if (placementTileListM.Count == 0) return;
+
         for (int i = 0; i < placementTileListM.Count; i++)
         {
             GameObject temp = placementTileList[i];
@@ -224,11 +213,12 @@ public class Manager : MonoBehaviour
 
     public void placeTile(GameObject pos)
     {
+        firstTile = false;
         Vector2 storing = placementTileListM[placementTileList.IndexOf(pos)]; ;
         selectionManager.placingTile.transform.position = pos.transform.position;
         ClearFeedBackPlacement();
         GestionTileAfterPlacement(storing);
-        UseIdentifierToActualizeTiles(pos.GetComponent<identifier>().identification, storing);
+        UseIdentifierToActualizeTiles(selectionManager.placingTile.GetComponent<identifier>().identification, storing);
         selectionManager.placingTile = null;
     }
 
@@ -238,7 +228,7 @@ public class Manager : MonoBehaviour
         matrixOBJ[(int)matrixPos.x, (int)matrixPos.y] = selectionManager.placingTile;
     }
 
-    void UseIdentifierToActualizeTiles(int ID, Vector2 pos)
+    void UseIdentifierToActualizeTiles(string ID, Vector2 pos)
     {
         //actualize the tile
         matrixGame[(int)pos.x, (int)pos.y] = ID;
@@ -247,63 +237,63 @@ public class Manager : MonoBehaviour
         // straight road (ID[2] == 1) on rotation 0 (ID[3] == 0) has an exit at x-1 and x+1
         // turn road (ID[2] == 2) on rotation 0 (ID[3] == 0) has an exit at x-1 and y-1
         // triple road (ID[2] == 3) on rotation 0 (ID[3] == 0) has an exit at x-1, x+1 and y-1 
-        if (ID.ToString()[2] == 1)
+        if (ID.ToString()[2] == 1.ToString()[0])
         {
-            if (ID.ToString()[3] == 0 || ID.ToString()[3] == 2)
+            if (ID.ToString()[3] == 0.ToString()[0] || ID.ToString()[3] == 2.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x - 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x + 1, (int)pos.y));
             }
-            else if (ID.ToString()[3] == 1 || ID.ToString()[3] == 3)
+            else if (ID.ToString()[3] == 1.ToString()[0] || ID.ToString()[3] == 3.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y - 1));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y + 1));
             }
         }
-        else if (ID.ToString()[2] == 2)
+        else if (ID.ToString()[2] == 2.ToString()[0])
         {
-            if (ID.ToString()[3] == 0)
+            if (ID.ToString()[3] == 0.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x - 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y - 1));
             }
-            else if (ID.ToString()[3] == 1)
+            else if (ID[3] == 1.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x + 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y - 1));
             }
-            else if (ID.ToString()[3] == 0)
+            else if (ID[3] == 2.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y + 1));
                 ActivateTile(new Vector2((int)pos.x + 1, (int)pos.y));
             }
-            if (ID.ToString()[3] == 0)
+            if (ID[3] == 3.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x - 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y + 1));
             }
         }
-        if (ID.ToString()[2] == 3)
+        if (ID.ToString()[2] == 3.ToString()[0])
         {
-            if (ID.ToString()[3] == 0)
+            if (ID[3] == 0.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x - 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x + 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y - 1));
             }
-            else if (ID.ToString()[3] == 0)
+            else if (ID[3] == 1.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y - 1));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y + 1));
                 ActivateTile(new Vector2((int)pos.x + 1, (int)pos.y));
             }
-            else if (ID.ToString()[3] == 0)
+            else if (ID[3] == 2.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x - 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x + 1, (int)pos.y));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y + 1));
             }
-            if (ID.ToString()[3] == 0)
+            if (ID[3] == 3.ToString()[0])
             {
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y - 1));
                 ActivateTile(new Vector2((int)pos.x, (int)pos.y + 1));
@@ -314,10 +304,96 @@ public class Manager : MonoBehaviour
 
     void ActivateTile(Vector2 posToActivate)
     {
-        if (posToActivate.x < 0 || posToActivate.x > matrixSize.x-1) return;
-        if (posToActivate.y < 0 || posToActivate.y > matrixSize.y-1) return;
-        if (matrixGame[(int)posToActivate.x, (int)posToActivate.y] != 0000) return;
+        if (posToActivate.x < 0 || posToActivate.x > matrixSize.x - 1) return;
+        if (posToActivate.y < 0 || posToActivate.y > matrixSize.y - 1) return;
+        if (matrixGame[(int)posToActivate.x, (int)posToActivate.y][0] != 0.ToString()[0]) return;
 
-        matrixGame[(int)posToActivate.x, (int)posToActivate.y] = 1000;
+        matrixGame[(int)posToActivate.x, (int)posToActivate.y] = "1000";
+    }
+
+    bool VerifyTileForFeedback(string ID, Vector2 posToCheck)
+    {
+        //verify if the tile can go over another tile
+        if (matrixGame[(int)posToCheck.x, (int)posToCheck.y][0] != 1.ToString()[0]) return false;
+        else if (firstTile) return true;
+
+        if (ID[1] <= matrixGame[(int)posToCheck.x, (int)posToCheck.y][1]) return false;
+
+        //rotation check
+        if (ID.ToString()[2] == 1)
+        {
+            if (ID.ToString()[3] == 0.ToString()[0] || ID.ToString()[3] == 2.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                else return false;
+            }
+            else if (ID.ToString()[3] == 1.ToString()[0] || ID.ToString()[3] == 3.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else return false;
+            }
+        }
+        else if (ID.ToString()[2] == 2.ToString()[0])
+        {
+            if (ID.ToString()[3] == 0.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else return false;
+            }
+            else if (ID[3] == 1.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                else return false;
+            }
+            else if (ID[3] == 2.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else return false;
+            }
+            if (ID[3] == 3.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else return false;
+            }
+        }
+        if (ID.ToString()[2] == 3.ToString()[0])
+        {
+            if (ID[3] == 0.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else return false;
+            }
+            else if (ID[3] == 1.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                else return false;
+            }
+            else if (ID[3] == 2.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else return false;
+            }
+            if (ID[3] == 3.ToString()[0])
+            {
+                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else return false;
+            }
+        }
+
+        return false;
     }
 }

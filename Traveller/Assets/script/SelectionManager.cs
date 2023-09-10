@@ -37,7 +37,7 @@ public class SelectionManager : MonoBehaviour
                 if (hit.collider.CompareTag("CanSelect") && selectedTile == null)
                 {
                     AttachSelected(hit);
-                    manager.FeedbackVisuPlacement();
+                    manager.FeedbackVisuPlacement(selectedTile.GetComponent<identifier>().identification);
                 }
                 else if (hit.collider.CompareTag("CanSelect") && selectedTile != null)
                 {
@@ -45,7 +45,7 @@ public class SelectionManager : MonoBehaviour
                     manager.ClearFeedBackPlacement();
 
                     AttachSelected(hit);
-                    manager.FeedbackVisuPlacement();
+                    manager.FeedbackVisuPlacement(selectedTile.GetComponent<identifier>().identification);
                 }
                 else if (hit.collider.gameObject == cancelTile && selectedTile != null)
                 {
@@ -60,7 +60,7 @@ public class SelectionManager : MonoBehaviour
 
                     manager.ClearFeedBackPlacement();
                     selectedTile.GetComponent<identifier>().rotationForIdentifier();
-                    manager.FeedbackVisuPlacement();
+                    manager.FeedbackVisuPlacement(selectedTile.GetComponent<identifier>().identification);
                 }
                 else if (hit.collider.CompareTag("Place"))
                 {
