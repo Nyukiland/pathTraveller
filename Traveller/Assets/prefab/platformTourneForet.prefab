@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4346527823213524869}
   - component: {fileID: 1115769660254969141}
+  - component: {fileID: -1788991659098024563}
   m_Layer: 0
   m_Name: platformTourneForet
   m_TagString: Untagged
@@ -46,6 +47,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2.5, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-1788991659098024563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320599570963194993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ed6e6e252ea4d438f6384f4368dfeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  identification: 1120
 --- !u!1 &5261385495456003596
 GameObject:
   m_ObjectHideFlags: 0

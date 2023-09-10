@@ -57,6 +57,10 @@ public class SelectionManager : MonoBehaviour
                     selectedTile.transform.SetParent(null);
                     selectedTile.transform.Rotate(selectedTile.transform.up, 90);
                     selectedTile.transform.SetParent(selectedPlacement.transform);
+
+                    manager.ClearFeedBackPlacement();
+                    selectedTile.GetComponent<identifier>().rotationForIdentifier();
+                    manager.FeedbackVisuPlacement();
                 }
                 else if (hit.collider.CompareTag("Place"))
                 {
