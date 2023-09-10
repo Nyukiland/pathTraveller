@@ -49,7 +49,7 @@ public class Manager : MonoBehaviour
     [Header("In hand quantity and deck itself (feedback variable DO NOT TOUCH)")]
     [Space(2)]
     [Tooltip("shows current tile in the deck of the player")] [SerializeField] List<GameObject> deck;
-    [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject[] inHand;
+    [Tooltip("shows current tile in the hand of the player")] public List<GameObject> inHand;
     [Tooltip("list of the placement feedbackTile")] [SerializeField] List<GameObject> placementTileList;
     [Tooltip("list of the position feedbackTile")] [SerializeField] List<Vector2> placementTileListM;
 
@@ -156,7 +156,6 @@ public class Manager : MonoBehaviour
 
     void InHandSetUp()
     {
-        inHand = new GameObject[inHandSize];
 
         for (int i = 0; i < inHandSize; i++)
         {
@@ -169,12 +168,29 @@ public class Manager : MonoBehaviour
 
             //remove it from the deck and add it to the array
             deck.RemoveAt(rng);
-            inHand[i] = clone;
+            inHand.Add(clone);
 
             //add tag to it
             clone.tag = "CanSelect";
 
         }
+    }
+
+    public void AddTileToHand(Vector3 posToCreate)
+    {
+        //create the tile
+        int rng = Random.Range(0, deck.Count);
+        GameObject clone = Instantiate(deck[rng], transform.position, Quaternion.identity);
+
+        //change the transform 
+        clone.transform.position = posToCreate;
+
+        //remove it from the deck and add it to the array
+        deck.RemoveAt(rng);
+        inHand.Add(clone);
+
+        //add tag to it
+        clone.tag = "CanSelect";
     }
 
     public void FeedbackVisuPlacement(string ID)
@@ -194,8 +210,6 @@ public class Manager : MonoBehaviour
                 }
             }
         }
-        
-        
     }
 
     public void ClearFeedBackPlacement()
@@ -204,8 +218,8 @@ public class Manager : MonoBehaviour
 
         for (int i = 0; i < placementTileListM.Count; i++)
         {
-            GameObject temp = placementTileList[i];
-            placementTileList.RemoveAt(i);
+            GameObject temp = placementTileList[0];
+            placementTileList.RemoveAt(0);
             Destroy(temp);
         }
         placementTileListM.Clear();
@@ -339,26 +353,26 @@ public class Manager : MonoBehaviour
         {
             if (ID.ToString()[3] == 0.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                if (IfTilePosExist(new Vector2 ((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
                 else return false;
             }
             else if (ID[3] == 1.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
                 else return false;
             }
             else if (ID[3] == 2.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
                 else return false;
             }
             if (ID[3] == 3.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                if (IfTilePosExist(new Vector2 ((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
                 else return false;
             }
         }
@@ -366,34 +380,41 @@ public class Manager : MonoBehaviour
         {
             if (ID[3] == 0.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
                 else return false;
             }
             else if (ID[3] == 1.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2 ((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
                 else return false;
             }
             else if (ID[3] == 2.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
                 else return false;
             }
             if (ID[3] == 3.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2 ((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
                 else return false;
             }
         }
 
         return false;
+    }
+
+    bool IfTilePosExist(Vector2 posToCheck)
+    {
+        if (posToCheck.x >= matrixSize.x || posToCheck.x < 0) return false;
+        else if (posToCheck.y >= matrixSize.y || posToCheck.y < 0) return false;
+        else return true;
     }
 }

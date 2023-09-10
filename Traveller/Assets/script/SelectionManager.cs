@@ -54,11 +54,11 @@ public class SelectionManager : MonoBehaviour
                 }
                 else if (hit.collider.gameObject == rotateTile && selectedTile != null)
                 {
+                    manager.ClearFeedBackPlacement();
                     selectedTile.transform.SetParent(null);
                     selectedTile.transform.Rotate(selectedTile.transform.up, 90);
                     selectedTile.transform.SetParent(selectedPlacement.transform);
 
-                    manager.ClearFeedBackPlacement();
                     selectedTile.GetComponent<identifier>().rotationForIdentifier();
                     manager.FeedbackVisuPlacement(selectedTile.GetComponent<identifier>().identification);
                 }
@@ -75,6 +75,10 @@ public class SelectionManager : MonoBehaviour
         selectedTile.transform.SetParent(null);
         placingTile = selectedTile;
         selectedTile = null;
+
+        manager.inHand.Remove(placingTile);
+        manager.AddTileToHand(posTile);
+
         posTile = Vector3.zero;
 
         manager.placeTile(obj);
