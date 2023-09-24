@@ -35,7 +35,9 @@ public class Manager : MonoBehaviour
     [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject sideHand;
     [Tooltip("visuale split between playground and hand")] [SerializeField] GameObject limitZone;
     [Tooltip("a gameObject that will be used as feedback for the placement")] [SerializeField] GameObject placementTile;
-    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedback;
+    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedbackF;
+    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedbackD;
+    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedbackC;
 
 
     [Space(10)]
@@ -225,15 +227,25 @@ public class Manager : MonoBehaviour
         placementTileListM.Clear();
     }
 
-    public void placeTile(GameObject pos)
+    public void PlaceTile(GameObject pos)
     {
         firstTile = false;
         Vector2 storing = placementTileListM[placementTileList.IndexOf(pos)]; ;
         selectionManager.placingTile.transform.position = pos.transform.position;
+        Particlespawn(pos.transform.position, selectionManager.placingTile.GetComponent<identifier>().identification);
         ClearFeedBackPlacement();
         GestionTileAfterPlacement(storing);
         UseIdentifierToActualizeTiles(selectionManager.placingTile.GetComponent<identifier>().identification, storing);
         selectionManager.placingTile = null;
+    }
+
+    void Particlespawn(Vector3 pos, string ID)
+    {
+        pos = pos + Vector3.up*3;
+
+        if (ID[1] == 1.ToString()[0]) Instantiate(particleFeedbackF, pos, Quaternion.identity);
+        if (ID[1] == 2.ToString()[0]) Instantiate(particleFeedbackD, pos, Quaternion.identity);
+        if (ID[1] == 3.ToString()[0]) Instantiate(particleFeedbackC, pos, Quaternion.identity);
     }
 
     void GestionTileAfterPlacement(Vector2 matrixPos)

@@ -81,7 +81,7 @@ public class SelectionManager : MonoBehaviour
 
         posTile = Vector3.zero;
 
-        manager.placeTile(obj);
+        manager.PlaceTile(obj);
         manager.ClearFeedBackPlacement();
     }
 

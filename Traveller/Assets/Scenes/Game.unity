@@ -357,6 +357,9 @@ MonoBehaviour:
   sideHand: {fileID: 678254554}
   limitZone: {fileID: 531250797}
   placementTile: {fileID: 4439705557956090167, guid: d272d5ecdf9176b47b1325259495833a, type: 3}
+  particleFeedbackF: {fileID: 7624888603269044193, guid: 66a859cbf222a4c4ba106ea8134a13be, type: 3}
+  particleFeedbackD: {fileID: 2259986529799438572, guid: 98e7b4cb3c5f26747a0d1eac19b72b19, type: 3}
+  particleFeedbackC: {fileID: 5607126683864077885, guid: 5cf650b6cdf796841ad39a82d9e5e302, type: 3}
   selectionManager: {fileID: 258908842}
   deck: []
   inHand: []
