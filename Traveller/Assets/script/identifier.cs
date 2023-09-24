@@ -28,9 +28,23 @@ public class identifier : MonoBehaviour
 
     public void rotationForIdentifier()
     {
-        if (transform.eulerAngles.y == 0) identification = string.Concat(identification[0], identification[1], identification[2], "0");
-        else if (transform.eulerAngles.y == 90) identification = string.Concat(identification[0], identification[1], identification[2], "1");
-        else if (transform.eulerAngles.y == 180) identification = string.Concat(identification[0], identification[1], identification[2], "2");
-        else if (transform.eulerAngles.y == 270) identification = string.Concat(identification[0], identification[1], identification[2], "3");
+        switch (transform.eulerAngles.y)
+        {
+            case 0:
+                identification = string.Concat(identification[0], identification[1], identification[2], "0");
+                break;
+
+            case 90:
+                identification = string.Concat(identification[0], identification[1], identification[2], "1");
+                break;
+
+            case 180:
+                identification = string.Concat(identification[0], identification[1], identification[2], "2");
+                break;
+
+            case 270:
+                identification = string.Concat(identification[0], identification[1], identification[2], "3");
+                break;
+        }
     }
 }

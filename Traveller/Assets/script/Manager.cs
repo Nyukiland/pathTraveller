@@ -195,6 +195,7 @@ public class Manager : MonoBehaviour
         clone.tag = "CanSelect";
     }
 
+    //when called place all the placement feedback to the possible position
     public void FeedbackVisuPlacement(string ID)
     {
         if (selectionManager.selectedTile != null)
@@ -213,7 +214,8 @@ public class Manager : MonoBehaviour
             }
         }
     }
-
+    
+    //remove all the placement feedback
     public void ClearFeedBackPlacement()
     {
         if (placementTileListM.Count == 0) return;
@@ -227,6 +229,7 @@ public class Manager : MonoBehaviour
         placementTileListM.Clear();
     }
 
+    //called when the selected tile need/can be placed
     public void PlaceTile(GameObject pos)
     {
         firstTile = false;
@@ -239,6 +242,7 @@ public class Manager : MonoBehaviour
         selectionManager.placingTile = null;
     }
 
+    //called to spawn the proper particle effects
     void Particlespawn(Vector3 pos, string ID)
     {
         pos = pos + Vector3.up*3;
@@ -248,12 +252,14 @@ public class Manager : MonoBehaviour
         if (ID[1] == 3.ToString()[0]) Instantiate(particleFeedbackC, pos, Quaternion.identity);
     }
 
+    //removes the previous tile on the pos and set the new tile in the matrix
     void GestionTileAfterPlacement(Vector2 matrixPos)
     {
         Destroy(matrixOBJ[(int)matrixPos.x, (int)matrixPos.y]);
         matrixOBJ[(int)matrixPos.x, (int)matrixPos.y] = selectionManager.placingTile;
     }
 
+    //gives the id of the tile to the position and set the tile around as playable based on the rotation of the tile
     void UseIdentifierToActualizeTiles(string ID, Vector2 pos)
     {
         //actualize the tile
@@ -328,6 +334,7 @@ public class Manager : MonoBehaviour
         }
     }
 
+    //called to set the tile as playable (also check if the position given correspond to a tile)
     void ActivateTile(Vector2 posToActivate)
     {
         if (posToActivate.x < 0 || posToActivate.x > matrixSize.x - 1) return;
@@ -337,6 +344,7 @@ public class Manager : MonoBehaviour
         matrixGame[(int)posToActivate.x, (int)posToActivate.y] = "1000";
     }
 
+    //when called check if the given tile is placable on the given postion (verify it's rotation to check if the path is connected)
     bool VerifyTileForFeedback(string ID, Vector2 posToCheck)
     {
         //verify if the tile can go over another tile
@@ -423,6 +431,7 @@ public class Manager : MonoBehaviour
         return false;
     }
 
+    //make sure the position exist
     bool IfTilePosExist(Vector2 posToCheck)
     {
         if (posToCheck.x >= matrixSize.x || posToCheck.x < 0) return false;
