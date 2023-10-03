@@ -6,7 +6,7 @@ public class Manager : MonoBehaviour
 {
     [Header("Difficulty control")]
     [Space(2)]
-    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you (do not go over 15)")] [SerializeField] Vector2 matrixSize; //the scene is not set up to go beyond a size but the code work with high quantity
+    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you (do not go over 15)")] public Vector2 matrixSize; //the scene is not set up to go beyond a size but the code work with high quantity
     [Space]
     [Tooltip("0 is everytime and 10 is 10% (mountains appear every 3 tile if possible)")] [Range(0, 10)] [SerializeField] int probabilityOfMountain;
 
@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour
     [Header("Tile deck quantity")]
     [Space(2)]
     [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] playableQuantity;
-    [Tooltip("number of tile in the hand of player")] [Range(1, 6)] [SerializeField] int inHandSize;
+    [Tooltip("number of tile in the hand of player")] [Range(1, 6)] public int inHandSize;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
@@ -79,6 +79,11 @@ public class Manager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
+    {
+        PreSet();
+    }
+
+    public void PreSet()
     {
         //automatically set the camera
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -matrixSize.y - 5);
