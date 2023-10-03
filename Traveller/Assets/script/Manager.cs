@@ -347,10 +347,11 @@ public class Manager : MonoBehaviour
     //when called check if the given tile is placable on the given postion (verify it's rotation to check if the path is connected)
     bool VerifyTileForFeedback(string ID, Vector2 posToCheck)
     {
-        //verify if the tile can go over another tile
+        //verify if the tile is said as placable
         if (matrixGame[(int)posToCheck.x, (int)posToCheck.y][0] != 1.ToString()[0]) return false;
         else if (firstTile) return true;
 
+        //verify if the tile can go over another tile
         if (ID[1] <= matrixGame[(int)posToCheck.x, (int)posToCheck.y][1]) return false;
 
         //rotation check
@@ -358,14 +359,14 @@ public class Manager : MonoBehaviour
         {
             if (ID.ToString()[3] == 0.ToString()[0] || ID.ToString()[3] == 2.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != 0) return true;
                 else return false;
             }
             else if (ID.ToString()[3] == 1.ToString()[0] || ID.ToString()[3] == 3.ToString()[0])
             {
-                if (matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
-                else if (matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
+                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != 0) return true;
+                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != 0) return true;
                 else return false;
             }
         }
