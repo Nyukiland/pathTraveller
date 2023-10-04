@@ -514,6 +514,7 @@ GameObject:
   - component: {fileID: 258908840}
   - component: {fileID: 258908839}
   - component: {fileID: 258908842}
+  - component: {fileID: 258908843}
   m_Layer: 0
   m_Name: manager
   m_TagString: Untagged
@@ -597,6 +598,26 @@ MonoBehaviour:
   selectedTile: {fileID: 0}
   placingTile: {fileID: 0}
   posTile: {x: 0, y: 0, z: 0}
+--- !u!114 &258908843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258908838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179d561bb28a7d04998f0abbac5b75dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 258908839}
+  regenButton: {fileID: 126682465}
+  numberDeck: {fileID: 1932041049}
+  sliderDeck: {fileID: 1127187408}
+  numberHeight: {fileID: 1852294157}
+  sliderHeight: {fileID: 460336764}
+  numberWidth: {fileID: 1521996986}
+  sliderWidth: {fileID: 1407490641}
 --- !u!1 &354385723
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,7 +1120,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 2
   m_MaxValue: 10
-  m_WholeNumbers: 0
+  m_WholeNumbers: 1
   m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2028,7 +2049,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 6
-  m_WholeNumbers: 0
+  m_WholeNumbers: 1
   m_Value: 4
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2673,7 +2694,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 2
   m_MaxValue: 7
-  m_WholeNumbers: 0
+  m_WholeNumbers: 1
   m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:

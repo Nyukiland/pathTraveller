@@ -6,54 +6,101 @@ public class Manager : MonoBehaviour
 {
     [Header("Difficulty control")]
     [Space(2)]
-    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you (do not go over 15)")] public Vector2 matrixSize; //the scene is not set up to go beyond a size but the code work with high quantity
+
+    [Tooltip("x is the number of tile on each side (better if odd) and y is the number of tile towards you (do not go over 15)")]
+    public Vector2 matrixSize; //the scene is not set up to go beyond a size but the code work with high quantity
+
     [Space]
-    [Tooltip("0 is everytime and 10 is 10% (mountains appear every 3 tile if possible)")] [Range(0, 10)] [SerializeField] int probabilityOfMountain;
+
+    [Tooltip("0 is everytime and 10 is 10% (mountains appear every 3 tile if possible)")]
+    [Range(0, 10)] [SerializeField] int probabilityOfMountain;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
     [Header("Prefab list")]
     [Space(2)]
 
-    [Tooltip("element 0 should be mountains, others are juste empty grass")] [SerializeField] GameObject[] prefabBegin;
+    [Tooltip("element 0 should be mountains, others are juste empty grass")]
+    [SerializeField]
+    GameObject[] prefabBegin;
 
     [Space]
 
-    [Tooltip("order should be the same as the set quantity")] [SerializeField] GameObject[] prefabPlayable;
+    [Tooltip("order should be the same as the set quantity")]
+    [SerializeField]
+    GameObject[] prefabPlayable;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
     [Header("Tile deck quantity")]
     [Space(2)]
-    [Tooltip("order should be the same as the prefab list")] [SerializeField] int[] playableQuantity;
-    [Tooltip("number of tile in the hand of player")] [Range(1, 6)] public int inHandSize;
+
+    [Tooltip("order should be the same as the prefab list")]
+    [SerializeField]
+    int[] playableQuantity;
+
+    [Tooltip("number of tile in the hand of player")]
+    [Range(1, 6)]
+    public int inHandSize;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
     [Header("GUI")]
     [Space(2)]
-    [Tooltip("shows current tile in the hand of the player")] [SerializeField] GameObject sideHand;
-    [Tooltip("visuale split between playground and hand")] [SerializeField] GameObject limitZone;
-    [Tooltip("a gameObject that will be used as feedback for the placement")] [SerializeField] GameObject placementTile;
-    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedbackF;
-    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedbackD;
-    [Tooltip("particle effect that will be spawned when a tile is created")] [SerializeField] GameObject particleFeedbackC;
+
+    [Tooltip("shows current tile in the hand of the player")]
+    [SerializeField]
+    GameObject sideHand;
+
+    [Tooltip("visuale split between playground and hand")]
+    [SerializeField]
+    GameObject limitZone;
+
+    [Tooltip("a gameObject that will be used as feedback for the placement")]
+    [SerializeField]
+    GameObject placementTile;
+
+    [Tooltip("particle effect that will be spawned when a tile is created")]
+    [SerializeField]
+    GameObject particleFeedbackF;
+
+    [Tooltip("particle effect that will be spawned when a tile is created")]
+    [SerializeField]
+    GameObject particleFeedbackD;
+
+    [Tooltip("particle effect that will be spawned when a tile is created")]
+    [SerializeField]
+    GameObject particleFeedbackC;
 
 
     [Space(10)]
     [Header("------------------------------------------------------")]
     [Header("Script variable field")]
     [Space(2)]
-    [Tooltip("need the selection manager script")] [SerializeField] SelectionManager selectionManager;
+
+    [Tooltip("need the selection manager script")]
+    [SerializeField]
+    SelectionManager selectionManager;
 
     [Space(10)]
     [Header("------------------------------------------------------")]
     [Header("In hand quantity and deck itself (feedback variable DO NOT TOUCH)")]
     [Space(2)]
-    [Tooltip("shows current tile in the deck of the player")] [SerializeField] List<GameObject> deck;
-    [Tooltip("shows current tile in the hand of the player")] public List<GameObject> inHand;
-    [Tooltip("list of the placement feedbackTile")] [SerializeField] List<GameObject> placementTileList;
-    [Tooltip("list of the position feedbackTile")] [SerializeField] List<Vector2> placementTileListM;
+
+    [Tooltip("shows current tile in the deck of the player")]
+    [SerializeField]
+    List<GameObject> deck;
+
+    [Tooltip("shows current tile in the hand of the player")]
+    public List<GameObject> inHand;
+
+    [Tooltip("list of the placement feedbackTile")]
+    [SerializeField]
+    List<GameObject> placementTileList;
+
+    [Tooltip("list of the position feedbackTile")]
+    [SerializeField]
+    List<Vector2> placementTileListM;
 
     /*
     Those matrix (multidimensionnal array) are filled with int each representing a value for the system to represent the capacity of a player
@@ -100,6 +147,27 @@ public class Manager : MonoBehaviour
 
         //create the hand
         InHandSetUp();
+    }
+
+    public void ResetScene()
+    {
+        //empty the hand of the player
+        deck.Clear();
+
+        for (int d = 0; d < inHandSize; d++)
+        {
+            Destroy(inHand[0]);
+        }
+        inHand.Clear();
+
+        //empty the scene form all the tile
+        for (int i = 0; i < matrixSize.x; i++)
+        {
+            for (int j = 0; j < matrixSize.y; j++)
+            {
+                Destroy(matrixOBJ[i, j]);
+            }
+        }
     }
 
     void SetUp()
