@@ -134,8 +134,8 @@ public class Manager : MonoBehaviour
     {
         //automatically set the camera
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -matrixSize.y - 5);
-        if (matrixSize.y > matrixSize.x) Camera.main.orthographicSize = Mathf.Clamp(matrixSize.y, 8, 10);
-        else Mathf.Clamp(matrixSize.x, 8, 10);
+        if (matrixSize.y > matrixSize.x) Camera.main.orthographicSize = Mathf.Clamp(matrixSize.y, 8, 15);
+        else Mathf.Clamp(matrixSize.x, 8, 15);
 
         //set up the scene and game
         SetUp();
@@ -156,7 +156,7 @@ public class Manager : MonoBehaviour
 
         for (int d = 0; d < inHandSize; d++)
         {
-            Destroy(inHand[0]);
+            Destroy(inHand[d]);
         }
         inHand.Clear();
 
