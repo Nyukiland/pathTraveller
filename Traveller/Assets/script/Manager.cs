@@ -134,12 +134,11 @@ public class Manager : MonoBehaviour
     {
         //automatically set the camera
         Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -matrixSize.y - 5);
-        if (matrixSize.y > matrixSize.x) Camera.main.orthographicSize = Mathf.Clamp(matrixSize.y, 8, 15);
-        else Mathf.Clamp(matrixSize.x, 8, 15);
 
         //set up the scene and game
         SetUp();
         CreateDeck();
+        firstTile = true;
 
         //visual feedback for the game
         limitZone.transform.position = new Vector3(matrixOBJ[(int)matrixSize.x - 1, 0].transform.position.x + 5, sideHand.transform.position.y, matrixOBJ[0, (int)matrixSize.y / 2].transform.position.z + 2);
@@ -151,6 +150,8 @@ public class Manager : MonoBehaviour
 
     public void ResetScene()
     {
+        ClearFeedBackPlacement();
+
         //empty the hand of the player
         deck.Clear();
 
@@ -214,7 +215,7 @@ public class Manager : MonoBehaviour
         }
 
         //determine the first tile as playable
-        matrixGame[(int)matrixSize.x / 2, 0] = string.Concat("1", matrixGame[(int)matrixSize.x / 2, 0][1], matrixGame[(int)matrixSize.x / 2, 0][2], matrixGame[(int)matrixSize.x / 2, 0][3]);
+        matrixGame[(int)matrixSize.x / 2, 0] = "1000";
     }
 
     void CreateDeck()
@@ -439,14 +440,14 @@ public class Manager : MonoBehaviour
         {
             if (tileRot == '0' || tileRot == '2')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
             else if (tileRot == '1' || tileRot == '3')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
                 else return false;
             }
         }
@@ -454,26 +455,26 @@ public class Manager : MonoBehaviour
         {
             if (tileRot == '0')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
             else if (tileRot == '1')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
             else if (tileRot == '2')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
             if (tileRot == '3')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
         }
@@ -481,30 +482,30 @@ public class Manager : MonoBehaviour
         {
             if (tileRot == '0')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
                 else return false;
             }
             else if (tileRot == '1')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
             else if (tileRot == '2')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
                 else return false;
             }
             if (tileRot == '3')
             {
-                if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
-                else if (IfTilePosExist(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
+                if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y - 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y - 1][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x - 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
         }
@@ -513,10 +514,76 @@ public class Manager : MonoBehaviour
     }
 
     //make sure the position exist
-    bool IfTilePosExist(Vector2 posToCheck)
+    bool IfTileLink(Vector2 posToCheck, Vector2 posToSet)
     {
+
+
         if (posToCheck.x >= matrixSize.x || posToCheck.x < 0) return false;
         else if (posToCheck.y >= matrixSize.y || posToCheck.y < 0) return false;
-        else return true;
+
+        char tileType = matrixGame[(int)posToCheck.x, (int)posToCheck.y].ToString()[2];
+        char tileRot = matrixGame[(int)posToCheck.x, (int)posToCheck.y].ToString()[3];
+
+        if (tileType == '1')
+        {
+            if (tileRot == '0' || tileRot == '2')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x - 1, (int)posToCheck.y) || posToSet == new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) return true;
+                else return false;
+            }
+            else if (tileRot == '1' || tileRot == '3')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y - 1) || posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) return true;
+                else return false;
+            }
+        }
+        else if (tileType == '2')
+        {
+            if (tileRot == '0')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y - 1) || posToSet == new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) return true;
+                else return false;
+            }
+            else if (tileRot == '1')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y - 1) || posToSet == new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) return true;
+                else return false;
+            }
+            else if (tileRot == '2')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y + 1) || posToSet == new Vector2((int)posToCheck.x + 1, (int)posToCheck.y)) return true;
+                else return false;
+            }
+            if (tileRot == '3')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y + 1) || posToSet == new Vector2((int)posToCheck.x - 1, (int)posToCheck.y)) return true;
+                else return false;
+            }
+        }
+        if (tileType == '3')
+        {
+            if (tileRot == '0')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x - 1, (int)posToCheck.y) || posToSet == new Vector2((int)posToCheck.x + 1, (int)posToCheck.y) || posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) return true;
+                else return false;
+            }
+            else if (tileRot == '1')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y + 1) || posToSet == new Vector2((int)posToCheck.x + 1, (int)posToCheck.y) || posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) return true;
+                else return false;
+            }
+            else if (tileRot == '2')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x - 1, (int)posToCheck.y) || posToSet == new Vector2((int)posToCheck.x + 1, (int)posToCheck.y) || posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y + 1)) return true;
+                else return false;
+            }
+            if (tileRot == '3')
+            {
+                if (posToSet == new Vector2((int)posToCheck.x - 1, (int)posToCheck.y) || posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y + 1) || posToSet == new Vector2((int)posToCheck.x, (int)posToCheck.y - 1)) return true;
+                else return false;
+            }
+        }
+
+        return false;
     }
 }
