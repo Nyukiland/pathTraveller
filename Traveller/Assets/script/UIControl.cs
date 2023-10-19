@@ -16,6 +16,10 @@ public class UIControl : MonoBehaviour
     [Header("Diverse UI element used")]
     [Space(2)]
 
+    [Tooltip("the button to leave the game")]
+    [SerializeField]
+    Button quitButton;
+
     [Tooltip("the button used to restart the scene")]
     [SerializeField]
     Button regenButton;
@@ -50,6 +54,7 @@ public class UIControl : MonoBehaviour
     void Start()
     {
         regenButton.onClick.AddListener(Regenerate);
+        quitButton.onClick.AddListener(Leave);
     }
 
     // Update is called once per frame
@@ -71,5 +76,10 @@ public class UIControl : MonoBehaviour
 
         //finally call the generation of the playground
         manager.PreSet();
+    }
+
+    void Leave()
+    {
+        Application.Quit();
     }
 }
