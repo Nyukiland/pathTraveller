@@ -468,7 +468,7 @@ public class Manager : MonoBehaviour
             else if (tileRot == '2')
             {
                 if (IfTileLink(new Vector2((int)posToCheck.x, (int)posToCheck.y + 1), posToCheck) && matrixGame[(int)posToCheck.x, (int)posToCheck.y + 1][2] != '0') return true;
-                else if (IfTileLink(new Vector2((int)posToCheck.x - 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
+                else if (IfTileLink(new Vector2((int)posToCheck.x + 1, (int)posToCheck.y), posToCheck) && matrixGame[(int)posToCheck.x + 1, (int)posToCheck.y][2] != '0') return true;
                 else return false;
             }
             if (tileRot == '3')
